@@ -1,8 +1,12 @@
 package com.akih.maps
 
+import com.akih.maps.model.NearbyPlaceResponse
 import okhttp3.OkHttpClient
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
+import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
 
 object NetworkModule {
@@ -25,4 +29,18 @@ object NetworkModule {
         }
         return retrofit!!
     }
+
+
+    fun api() = instanceRetrofit().create(MapsApi::class.java)
+}
+
+
+interface MapsApi {
+    @GET("nearbysearch/json")
+    fun nearbyPlace(
+        @Query("location") location: String,
+        @Query("type") type: String,
+        @Query("radius") radius: String,
+        @Query("key") apiKey: String = BuildConfig.MAPS_API_KEY
+    ) : Call<NearbyPlaceResponse>
 }
